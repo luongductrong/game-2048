@@ -1,8 +1,22 @@
+import React from "react";
+
 type Props = {
   onFullScreenChange: (isFullScreen: boolean) => void;
 };
 
 function ExitButton({ onFullScreenChange }: Props) {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "F11") {
+        e.preventDefault();
+        document.exitFullscreen();
+        onFullScreenChange(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <button
       className="fixed top-5 right-5"

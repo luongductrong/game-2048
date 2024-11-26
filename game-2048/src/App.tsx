@@ -16,7 +16,7 @@ import { isGameOver as hasGameOver, isWin as hasWin } from "./handlers";
 // ];
 type ScoreType = {
   score: number;
-  hightScore: number;
+  highScore: number;
 };
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
   const oldGridMatrix = React.useRef<number[][]>(gridMatrix);
   const [score, setScore] = React.useState<ScoreType>({
     score: 0,
-    hightScore: 0,
+    highScore: 0,
   });
   const oldScore = React.useRef<ScoreType>(score);
   const prevScore = React.useRef<number>(score.score);
@@ -33,6 +33,11 @@ function App() {
   const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
   const touchStartRef = React.useRef<Touch | null>(null);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
+  const isFullScreenRef = React.useRef<boolean>(isFullScreen);
+
+  React.useEffect(() => {
+    isFullScreenRef.current = isFullScreen;
+  }, [isFullScreen]);
 
   React.useEffect(() => {
     document.addEventListener("fullscreenchange", () => {
@@ -59,26 +64,26 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    const savedHighScore = localStorage.getItem("hightScore2048");
+    const savedHighScore = localStorage.getItem("highScore2048");
     if (savedHighScore) {
       setScore((prevScore) => ({
         ...prevScore,
-        hightScore: parseInt(savedHighScore),
+        highScore: parseInt(savedHighScore),
       }));
     }
   }, []);
 
   React.useEffect(() => {
     if (score.score > prevScore.current) {
-      const newHighScore = Math.max(score.score, score.hightScore);
-      localStorage.setItem("hightScore2048", newHighScore.toString());
+      const newHighScore = Math.max(score.score, score.highScore);
+      localStorage.setItem("highScore2048", newHighScore.toString());
       setScore((prevScore) => ({
         ...prevScore,
-        hightScore: newHighScore,
+        highScore: newHighScore,
       }));
     }
     prevScore.current = score.score;
-  }, [score.score, score.hightScore]);
+  }, [score.score, score.highScore]);
 
   React.useEffect(() => {
     if (hasWin(gridMatrix)) {
@@ -89,169 +94,165 @@ function App() {
     }
   }, [gridMatrix]);
 
-  React.useEffect(() => {
-    const handleMoveUp = () => {
-      setGridMatrix((prevMatrix) => {
-        const newMatrix = moveUp(prevMatrix, score, (newScore: ScoreType) =>
-          setScore((prevScore) => {
-            const updatedScore = {
-              score: prevScore.score + newScore.score,
-              hightScore: Math.max(
-                prevScore.score + newScore.score,
-                prevScore.hightScore
-              ),
-            };
-            oldScore.current = prevScore;
-            return updatedScore;
-          })
-        );
-        oldGridMatrix.current = prevMatrix;
-        return newMatrix;
-      });
-    };
+  const handleMoveUp = () => {
+    setGridMatrix((prevMatrix) => {
+      const newMatrix = moveUp(prevMatrix, score, (newScore: ScoreType) =>
+        setScore((prevScore) => {
+          const updatedScore = {
+            score: prevScore.score + newScore.score,
+            highScore: Math.max(
+              prevScore.score + newScore.score,
+              prevScore.highScore
+            ),
+          };
+          oldScore.current = prevScore;
+          return updatedScore;
+        })
+      );
+      oldGridMatrix.current = prevMatrix;
+      return newMatrix;
+    });
+  };
 
-    const handleMoveDown = () => {
-      setGridMatrix((prevMatrix) => {
-        const newMatrix = moveDown(prevMatrix, score, (newScore: ScoreType) =>
-          setScore((prevScore) => {
-            const updatedScore = {
-              score: prevScore.score + newScore.score,
-              hightScore: Math.max(
-                prevScore.score + newScore.score,
-                prevScore.hightScore
-              ),
-            };
-            oldScore.current = prevScore;
-            return updatedScore;
-          })
-        );
-        oldGridMatrix.current = prevMatrix;
-        return newMatrix;
-      });
-    };
+  const handleMoveDown = () => {
+    setGridMatrix((prevMatrix) => {
+      const newMatrix = moveDown(prevMatrix, score, (newScore: ScoreType) =>
+        setScore((prevScore) => {
+          const updatedScore = {
+            score: prevScore.score + newScore.score,
+            highScore: Math.max(
+              prevScore.score + newScore.score,
+              prevScore.highScore
+            ),
+          };
+          oldScore.current = prevScore;
+          return updatedScore;
+        })
+      );
+      oldGridMatrix.current = prevMatrix;
+      return newMatrix;
+    });
+  };
 
-    const handleMoveLeft = () => {
-      setGridMatrix((prevMatrix) => {
-        const newMatrix = moveLeft(prevMatrix, score, (newScore: ScoreType) =>
-          setScore((prevScore) => {
-            const updatedScore = {
-              score: prevScore.score + newScore.score,
-              hightScore: Math.max(
-                prevScore.score + newScore.score,
-                prevScore.hightScore
-              ),
-            };
-            oldScore.current = prevScore;
-            return updatedScore;
-          })
-        );
-        oldGridMatrix.current = prevMatrix;
-        return newMatrix;
-      });
-    };
+  const handleMoveLeft = () => {
+    setGridMatrix((prevMatrix) => {
+      const newMatrix = moveLeft(prevMatrix, score, (newScore: ScoreType) =>
+        setScore((prevScore) => {
+          const updatedScore = {
+            score: prevScore.score + newScore.score,
+            highScore: Math.max(
+              prevScore.score + newScore.score,
+              prevScore.highScore
+            ),
+          };
+          oldScore.current = prevScore;
+          return updatedScore;
+        })
+      );
+      oldGridMatrix.current = prevMatrix;
+      return newMatrix;
+    });
+  };
 
-    const handleMoveRight = () => {
-      setGridMatrix((prevMatrix) => {
-        const newMatrix = moveRight(prevMatrix, score, (newScore: ScoreType) =>
-          setScore((prevScore) => {
-            const updatedScore = {
-              score: prevScore.score + newScore.score,
-              hightScore: Math.max(
-                prevScore.score + newScore.score,
-                prevScore.hightScore
-              ),
-            };
-            oldScore.current = prevScore;
-            return updatedScore;
-          })
-        );
-        oldGridMatrix.current = prevMatrix;
-        return newMatrix;
-      });
-    };
+  const handleMoveRight = () => {
+    setGridMatrix((prevMatrix) => {
+      const newMatrix = moveRight(prevMatrix, score, (newScore: ScoreType) =>
+        setScore((prevScore) => {
+          const updatedScore = {
+            score: prevScore.score + newScore.score,
+            highScore: Math.max(
+              prevScore.score + newScore.score,
+              prevScore.highScore
+            ),
+          };
+          oldScore.current = prevScore;
+          return updatedScore;
+        })
+      );
+      oldGridMatrix.current = prevMatrix;
+      return newMatrix;
+    });
+  };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isFullScreen) {
-        switch (e.key) {
-          case "ArrowUp":
-          case "w":
-          case "W":
-            handleMoveUp();
-            break;
-          case "ArrowDown":
-          case "s":
-          case "S":
-            handleMoveDown();
-            break;
-          case "ArrowLeft":
-          case "a":
-          case "A":
-            handleMoveLeft();
-            break;
-          case "ArrowRight":
-          case "d":
-          case "D":
-            handleMoveRight();
-            break;
-        }
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (isFullScreenRef.current) {
+      switch (e.key) {
+        case "ArrowUp":
+        case "w":
+        case "W":
+          handleMoveUp();
+          break;
+        case "ArrowDown":
+        case "s":
+        case "S":
+          handleMoveDown();
+          break;
+        case "ArrowLeft":
+        case "a":
+        case "A":
+          handleMoveLeft();
+          break;
+        case "ArrowRight":
+        case "d":
+        case "D":
+          handleMoveRight();
+          break;
       }
-    };
+    }
+  };
 
-    const handleSwipe = (
-      start: Touch | null,
-      end: Touch
-    ): string | undefined => {
-      if (!start) return;
+  const handleSwipe = (start: Touch | null, end: Touch): string | undefined => {
+    if (!start) return;
 
-      const dx = end.clientX - start.clientX;
-      const dy = end.clientY - start.clientY;
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const dx = end.clientX - start.clientX;
+    const dy = end.clientY - start.clientY;
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-      if (Math.abs(dx) > 50 || Math.abs(dy) > 50) {
-        if (angle > -45 && angle <= 45) {
-          return "right";
-        } else if (angle > 45 && angle <= 135) {
-          return "down";
-        } else if (angle > 135 || angle <= -135) {
-          return "left";
-        } else {
-          return "up";
-        }
+    if (Math.abs(dx) > 50 || Math.abs(dy) > 50) {
+      if (angle > -45 && angle <= 45) {
+        return "right";
+      } else if (angle > 45 && angle <= 135) {
+        return "down";
+      } else if (angle > 135 || angle <= -135) {
+        return "left";
+      } else {
+        return "up";
       }
-    };
+    }
+  };
 
-    const handleTouchStart = (e: TouchEvent) => {
-      if (isFullScreen) {
-        const touchStart = e.changedTouches[0];
-        touchStartRef.current = touchStart;
-      }
-    };
+  const handleTouchStart = (e: TouchEvent) => {
+    if (isFullScreenRef.current) {
+      const touchStart = e.changedTouches[0];
+      touchStartRef.current = touchStart;
+    }
+  };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (isFullScreen) {
-        const touchEnd = e.changedTouches[0];
-        if (touchStartRef.current) {
-          const swipeDirection = handleSwipe(touchStartRef.current, touchEnd);
-          if (swipeDirection) {
-            switch (swipeDirection) {
-              case "up":
-                handleMoveUp();
-                break;
-              case "down":
-                handleMoveDown();
-                break;
-              case "left":
-                handleMoveLeft();
-                break;
-              case "right":
-                handleMoveRight();
-                break;
-            }
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (isFullScreenRef.current) {
+      const touchEnd = e.changedTouches[0];
+      if (touchStartRef.current) {
+        const swipeDirection = handleSwipe(touchStartRef.current, touchEnd);
+        if (swipeDirection) {
+          switch (swipeDirection) {
+            case "up":
+              handleMoveUp();
+              break;
+            case "down":
+              handleMoveDown();
+              break;
+            case "left":
+              handleMoveLeft();
+              break;
+            case "right":
+              handleMoveRight();
+              break;
           }
         }
       }
-    };
-
+    }
+  };
+  React.useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchend", handleTouchEnd);
@@ -260,7 +261,7 @@ function App() {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isFullScreen]);
+  }, []);
 
   React.useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
@@ -309,7 +310,7 @@ function App() {
             setGridMatrix(oldGridMatrix.current);
           }}
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setGridMatrix(newGame());
           }}
         />
@@ -320,7 +321,7 @@ function App() {
         <Modal
           title="You Win!"
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setIsWin(false);
             setGridMatrix(newGame());
           }}
@@ -330,7 +331,7 @@ function App() {
         <Modal
           title="Game Over!"
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setIsGameOver(false);
             setGridMatrix(newGame());
           }}

@@ -1,6 +1,6 @@
 type ScoreType = {
   score: number;
-  hightScore: number;
+  highScore: number;
 };
 
 type AddScoreType = {
@@ -148,7 +148,7 @@ const moveUp = (
   if (addScore.score > 0) {
     onScoreChange({
       score: score.score + addScore.score,
-      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+      highScore: Math.max(score.score + addScore.score, score.highScore),
     });
   }
   return transposeMatrix;
@@ -177,7 +177,7 @@ const moveDown = (
   if (addScore.score > 0) {
     onScoreChange({
       score: score.score + addScore.score,
-      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+      highScore: Math.max(score.score + addScore.score, score.highScore),
     });
   }
   return transposeMatrix;
@@ -205,7 +205,7 @@ const moveLeft = (
   if (addScore.score > 0) {
     onScoreChange({
       score: score.score + addScore.score,
-      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+      highScore: Math.max(score.score + addScore.score, score.highScore),
     });
   }
   return newMatrix;
@@ -233,7 +233,7 @@ const moveRight = (
   if (addScore.score > 0) {
     onScoreChange({
       score: score.score + addScore.score,
-      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+      highScore: Math.max(score.score + addScore.score, score.highScore),
     });
   }
   return newMatrix;
