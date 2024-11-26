@@ -2,6 +2,7 @@ import React from "react";
 import Grid from "./components/Grid";
 import Score from "./components/Score";
 import Buttons from "./components/Buttons";
+import Modal from "./components/Modal";
 import { newGame, moveUp, moveDown, moveLeft, moveRight } from "./handlers";
 
 // const gridMatrix = [
@@ -15,6 +16,8 @@ function App() {
   const [isLandscape, setIsLandscape] = React.useState<boolean>(false);
   const [gridMatrix, setGridMatrix] = React.useState<number[][]>(newGame());
   const oldGridMatrix = React.useRef<number[][]>(gridMatrix);
+  const [isWin, setIsWin] = React.useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -82,7 +85,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center h-screen">
+    <div className="flex justify-center h-screen relative">
       <div
         className={`container flex flex-col justify-center px-4 ${
           !isLandscape ? "w-screen h-full" : "w-[70vh] h-full"
@@ -96,6 +99,24 @@ function App() {
         <Grid gridMatrix={gridMatrix} />
         {!isLandscape && <div className="py-4"></div>}
       </div>
+      {isWin && (
+        <Modal
+          title="You Win!"
+          onNewGame={() => {
+            setIsWin(false);
+            setGridMatrix(newGame());
+          }}
+        />
+      )}
+      {isGameOver && (
+        <Modal
+          title="Game Over!"
+          onNewGame={() => {
+            setIsGameOver(false);
+            setGridMatrix(newGame());
+          }}
+        />
+      )}
     </div>
   );
 }

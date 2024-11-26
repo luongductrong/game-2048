@@ -1,4 +1,8 @@
-function Grid({ gridMatrix }: { gridMatrix: number[][] }) {
+type GridProps = {
+  gridMatrix: number[][];
+};
+
+function Grid({ gridMatrix }: GridProps) {
   const getCellColor = (cell: number) => {
     switch (cell) {
       case 2:
