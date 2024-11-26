@@ -1,19 +1,23 @@
 import React from "react";
 
-type ScoreProps = {
+type ScoreType = {
   score: number;
   hightScore: number;
 };
 
-function Score({ score, hightScore }: ScoreProps) {
+type ScoreProps = {
+  score: ScoreType;
+};
+
+function Score({ score }: ScoreProps) {
   const formatScore = (score: number): string => {
     if (score < 1000) return score.toString();
     if (score < 1000000) return `${(score / 1000).toFixed(1)}K`;
     return `${(score / 1000000).toFixed(1)}M`;
   };
 
-  const scoreX = formatScore(score);
-  const hightScoreX = formatScore(hightScore);
+  const scoreX = formatScore(score.score);
+  const hightScoreX = formatScore(score.hightScore);
 
   return (
     <div className="flex flex-row font-noto w-full">

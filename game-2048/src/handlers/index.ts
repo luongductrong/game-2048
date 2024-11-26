@@ -1,3 +1,12 @@
+type ScoreType = {
+  score: number;
+  hightScore: number;
+};
+
+type AddScoreType = {
+  score: number;
+};
+
 const randomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -83,7 +92,7 @@ const newCell = (newMatrix: number[][]) => {
   newMatrix[cell.latitude][cell.longitude] = cell.value;
 };
 
-const merge = (cells: number[], isRevest: boolean) => {
+const merge = (cells: number[], isRevest: boolean, addScore: AddScoreType) => {
   const result: number[] = [];
   let skip = false;
 
@@ -96,6 +105,7 @@ const merge = (cells: number[], isRevest: boolean) => {
       } else {
         if (cell === array[index + 1]) {
           result.push(cell * 2);
+          addScore.score += cell * 2;
           skip = true;
           return;
         }
@@ -116,65 +126,121 @@ const transpose = (matrix: number[][]) => {
   return matrix[0].map((_, colIndex) => matrix.map((row) => row[colIndex]));
 };
 
-const moveUp = (gridMatrix: number[][]) => {
+const moveUp = (
+  gridMatrix: number[][],
+  score: ScoreType,
+  onScoreChange: (newScore: ScoreType) => void
+) => {
   const newMatrix = transpose(gridMatrix);
+  const addScore: AddScoreType = {
+    score: 0,
+  };
 
-  newMatrix[0] = merge(newMatrix[0], false);
-  newMatrix[1] = merge(newMatrix[1], false);
-  newMatrix[2] = merge(newMatrix[2], false);
-  newMatrix[3] = merge(newMatrix[3], false);
+  newMatrix[0] = merge(newMatrix[0], false, addScore);
+  newMatrix[1] = merge(newMatrix[1], false, addScore);
+  newMatrix[2] = merge(newMatrix[2], false, addScore);
+  newMatrix[3] = merge(newMatrix[3], false, addScore);
 
   const transposeMatrix = transpose(newMatrix);
   if (areMatricesEqual(gridMatrix, transposeMatrix)) {
     return gridMatrix;
   }
   newCell(transposeMatrix);
+  if (addScore.score > 0) {
+    console.log("Add score: ", addScore.score, "Old Score", score.score);
+    onScoreChange({
+      score: score.score + addScore.score,
+      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+    });
+  }
   return transposeMatrix;
 };
 
-const moveDown = (gridMatrix: number[][]) => {
+const moveDown = (
+  gridMatrix: number[][],
+  score: ScoreType,
+  onScoreChange: (newScore: ScoreType) => void
+) => {
   const newMatrix = transpose(gridMatrix);
+  const addScore: AddScoreType = {
+    score: 0,
+  };
 
-  newMatrix[0] = merge(newMatrix[0], true);
-  newMatrix[1] = merge(newMatrix[1], true);
-  newMatrix[2] = merge(newMatrix[2], true);
-  newMatrix[3] = merge(newMatrix[3], true);
+  newMatrix[0] = merge(newMatrix[0], true, addScore);
+  newMatrix[1] = merge(newMatrix[1], true, addScore);
+  newMatrix[2] = merge(newMatrix[2], true, addScore);
+  newMatrix[3] = merge(newMatrix[3], true, addScore);
 
   const transposeMatrix = transpose(newMatrix);
   if (areMatricesEqual(gridMatrix, transposeMatrix)) {
     return gridMatrix;
   }
   newCell(transposeMatrix);
+  if (addScore.score > 0) {
+    console.log("Add score: ", addScore.score, "Old Score", score.score);
+    onScoreChange({
+      score: score.score + addScore.score,
+      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+    });
+  }
   return transposeMatrix;
 };
 
-const moveLeft = (gridMatrix: number[][]) => {
+const moveLeft = (
+  gridMatrix: number[][],
+  score: ScoreType,
+  onScoreChange: (newScore: ScoreType) => void
+) => {
   const newMatrix = gridMatrix.map((row) => [...row]);
+  const addScore: AddScoreType = {
+    score: 0,
+  };
 
-  newMatrix[0] = merge(newMatrix[0], false);
-  newMatrix[1] = merge(newMatrix[1], false);
-  newMatrix[2] = merge(newMatrix[2], false);
-  newMatrix[3] = merge(newMatrix[3], false);
+  newMatrix[0] = merge(newMatrix[0], false, addScore);
+  newMatrix[1] = merge(newMatrix[1], false, addScore);
+  newMatrix[2] = merge(newMatrix[2], false, addScore);
+  newMatrix[3] = merge(newMatrix[3], false, addScore);
 
   if (areMatricesEqual(gridMatrix, newMatrix)) {
     return gridMatrix;
   }
   newCell(newMatrix);
+  if (addScore.score > 0) {
+    console.log("Add score: ", addScore.score, "Old Score", score.score);
+    onScoreChange({
+      score: score.score + addScore.score,
+      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+    });
+  }
   return newMatrix;
 };
 
-const moveRight = (gridMatrix: number[][]) => {
+const moveRight = (
+  gridMatrix: number[][],
+  score: ScoreType,
+  onScoreChange: (newScore: ScoreType) => void
+) => {
   const newMatrix = gridMatrix.map((row) => [...row]);
+  const addScore: AddScoreType = {
+    score: 0,
+  };
 
-  newMatrix[0] = merge(newMatrix[0], true);
-  newMatrix[1] = merge(newMatrix[1], true);
-  newMatrix[2] = merge(newMatrix[2], true);
-  newMatrix[3] = merge(newMatrix[3], true);
+  newMatrix[0] = merge(newMatrix[0], true, addScore);
+  newMatrix[1] = merge(newMatrix[1], true, addScore);
+  newMatrix[2] = merge(newMatrix[2], true, addScore);
+  newMatrix[3] = merge(newMatrix[3], true, addScore);
 
   if (areMatricesEqual(gridMatrix, newMatrix)) {
     return gridMatrix;
   }
   newCell(newMatrix);
+  if (addScore.score > 0) {
+    console.log("Add score: ", addScore.score, "Old Score", score.score);
+    onScoreChange({
+      score: score.score + addScore.score,
+      hightScore: Math.max(score.score + addScore.score, score.hightScore),
+    });
+  }
   return newMatrix;
 };
 
