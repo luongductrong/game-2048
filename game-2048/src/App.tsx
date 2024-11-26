@@ -4,6 +4,7 @@ import Score from "./components/Score";
 import Buttons from "./components/Buttons";
 import Modal from "./components/Modal";
 import FullScreenButton from "./components/FullScreenButton";
+import ExitButton from "./components/ExitFullScreenButton";
 import { newGame, moveUp, moveDown, moveLeft, moveRight } from "./handlers";
 import { isGameOver as hasGameOver, isWin as hasWin } from "./handlers";
 
@@ -32,6 +33,30 @@ function App() {
   const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
   const touchStartRef = React.useRef<Touch | null>(null);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement === null) {
+        setIsFullScreen(false);
+      }
+    });
+    return () => {
+      document.removeEventListener("fullscreenchange", () => {
+        setIsFullScreen(false);
+      });
+    };
+  }, []);
+
+  React.useEffect(() => {
+    document.addEventListener("selectstart", (e) => {
+      e.preventDefault();
+    });
+    return () => {
+      document.removeEventListener("selectstart", (e) => {
+        e.preventDefault();
+      });
+    };
+  }, []);
 
   React.useEffect(() => {
     const savedHighScore = localStorage.getItem("hightScore2048");
@@ -239,7 +264,7 @@ function App() {
 
   React.useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches[0].clientY > 50) {
+      if (e.touches[0].clientY > 50 && isFullScreen) {
         e.preventDefault();
       }
     };
@@ -267,7 +292,9 @@ function App() {
 
   return (
     <div className="flex justify-center h-screen relative">
-      {!isFullScreen && (
+      {isFullScreen ? (
+        <ExitButton onFullScreenChange={setIsFullScreen} />
+      ) : (
         <FullScreenButton onFullScreenChange={setIsFullScreen} />
       )}
       <div
