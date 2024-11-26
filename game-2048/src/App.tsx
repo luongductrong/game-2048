@@ -29,15 +29,16 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center  h-screen">
+    <div className="flex justify-center h-screen">
       <div
-        className={`container ${
+        className={`container flex flex-col justify-center px-4 ${
           !isLandscape ? "w-screen h-full" : "w-[60vh] h-full"
         } bg-rose-100`}
       >
         <Score score={12000} hightScore={10} />
         <Buttons onUndo={() => {}} onNewGame={() => {}} />
         <Grid gridMatrix={gridMatrix} />
+        <div className="py-4"></div>
       </div>
     </div>
   );
