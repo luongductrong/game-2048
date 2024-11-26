@@ -16,7 +16,7 @@ function Grid({ gridMatrix }: { gridMatrix: number[][] }) {
       case 128:
         return "bg-indigo-500";
       case 256:
-        return "bg-red-300";
+        return "bg-red-600";
       case 512:
         return "bg-blue-300";
       case 1024:
@@ -24,7 +24,7 @@ function Grid({ gridMatrix }: { gridMatrix: number[][] }) {
       case 2048:
         return "bg-yellow-300";
       default:
-        return "bg-gray-300";
+        return "bg-rose-100";
     }
   };
   return (
@@ -33,9 +33,11 @@ function Grid({ gridMatrix }: { gridMatrix: number[][] }) {
         row.map((cell, cellIndex) => (
           <div
             key={`${rowIndex}-${cellIndex}`}
-            className={`${getCellColor(cell)} w-full aspect-square rounded-md`}
+            className={`${getCellColor(
+              cell
+            )} w-full aspect-square rounded-md flex items-center justify-center text-2xl font-bold`}
           >
-            {cell}
+            {cell > 0 ? cell : null}
           </div>
         ))
       )}
