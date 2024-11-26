@@ -1,5 +1,7 @@
 import React from "react";
 import Grid from "./components/Grid";
+import Score from "./components/Score";
+import Buttons from "./components/Buttons";
 
 const gridMatrix = [
   [2, 4, 8, 16],
@@ -33,6 +35,8 @@ function App() {
           !isLandscape ? "w-screen h-full" : "w-[60vh] h-full"
         } bg-red-200`}
       >
+        <Score score={10} hightScore={10} />
+        <Buttons onUndo={() => {}} onNewGame={() => {}} />
         <Grid gridMatrix={gridMatrix} />
       </div>
     </div>

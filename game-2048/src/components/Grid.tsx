@@ -28,7 +28,7 @@ function Grid({ gridMatrix }: { gridMatrix: number[][] }) {
     }
   };
   return (
-    <div className="grid grid-cols-4 gap-3 bg-red-300 p-3 rounded-md">
+    <div className="grid grid-cols-4 gap-3 bg-rose-300 p-3 rounded-md">
       {gridMatrix.map((row, rowIndex) =>
         row.map((cell, cellIndex) => (
           <div
