@@ -84,9 +84,8 @@ const newCell = (newMatrix: number[][]) => {
     count++;
     if (count > 16) {
       if (isGameOver(newMatrix)) {
-        console.log("Game Over");
+        return;
       }
-      return;
     }
   }
   newMatrix[cell.latitude][cell.longitude] = cell.value;
@@ -147,7 +146,6 @@ const moveUp = (
   }
   newCell(transposeMatrix);
   if (addScore.score > 0) {
-    console.log("Add score: ", addScore.score, "Old Score", score.score);
     onScoreChange({
       score: score.score + addScore.score,
       hightScore: Math.max(score.score + addScore.score, score.hightScore),
@@ -177,7 +175,6 @@ const moveDown = (
   }
   newCell(transposeMatrix);
   if (addScore.score > 0) {
-    console.log("Add score: ", addScore.score, "Old Score", score.score);
     onScoreChange({
       score: score.score + addScore.score,
       hightScore: Math.max(score.score + addScore.score, score.hightScore),
@@ -206,7 +203,6 @@ const moveLeft = (
   }
   newCell(newMatrix);
   if (addScore.score > 0) {
-    console.log("Add score: ", addScore.score, "Old Score", score.score);
     onScoreChange({
       score: score.score + addScore.score,
       hightScore: Math.max(score.score + addScore.score, score.hightScore),
@@ -235,7 +231,6 @@ const moveRight = (
   }
   newCell(newMatrix);
   if (addScore.score > 0) {
-    console.log("Add score: ", addScore.score, "Old Score", score.score);
     onScoreChange({
       score: score.score + addScore.score,
       hightScore: Math.max(score.score + addScore.score, score.hightScore),
