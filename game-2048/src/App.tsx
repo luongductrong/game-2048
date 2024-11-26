@@ -33,9 +33,9 @@ function App() {
       <div
         className={`container ${
           !isLandscape ? "w-screen h-full" : "w-[60vh] h-full"
-        } bg-red-200`}
+        } bg-rose-100`}
       >
-        <Score score={10} hightScore={10} />
+        <Score score={12000} hightScore={10} />
         <Buttons onUndo={() => {}} onNewGame={() => {}} />
         <Grid gridMatrix={gridMatrix} />
       </div>
