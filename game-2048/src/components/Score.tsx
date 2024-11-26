@@ -2,7 +2,7 @@ import React from "react";
 
 type ScoreType = {
   score: number;
-  hightScore: number;
+  highScore: number;
 };
 
 type ScoreProps = {
@@ -17,7 +17,7 @@ function Score({ score }: ScoreProps) {
   };
 
   const scoreX = formatScore(score.score);
-  const hightScoreX = formatScore(score.hightScore);
+  const highScoreX = formatScore(score.highScore);
 
   return (
     <div className="flex flex-row font-noto w-full">
@@ -38,7 +38,7 @@ function Score({ score }: ScoreProps) {
             High Score
           </div>
           <div className="text-xl font-bold text-rose-50 inline-block">
-            {hightScoreX}
+            {highScoreX}
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ import { isGameOver as hasGameOver, isWin as hasWin } from "./handlers";
 // ];
 type ScoreType = {
   score: number;
-  hightScore: number;
+  highScore: number;
 };
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
   const oldGridMatrix = React.useRef<number[][]>(gridMatrix);
   const [score, setScore] = React.useState<ScoreType>({
     score: 0,
-    hightScore: 0,
+    highScore: 0,
   });
   const oldScore = React.useRef<ScoreType>(score);
   const prevScore = React.useRef<number>(score.score);
@@ -59,26 +59,26 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    const savedHighScore = localStorage.getItem("hightScore2048");
+    const savedHighScore = localStorage.getItem("highScore2048");
     if (savedHighScore) {
       setScore((prevScore) => ({
         ...prevScore,
-        hightScore: parseInt(savedHighScore),
+        highScore: parseInt(savedHighScore),
       }));
     }
   }, []);
 
   React.useEffect(() => {
     if (score.score > prevScore.current) {
-      const newHighScore = Math.max(score.score, score.hightScore);
-      localStorage.setItem("hightScore2048", newHighScore.toString());
+      const newHighScore = Math.max(score.score, score.highScore);
+      localStorage.setItem("highScore2048", newHighScore.toString());
       setScore((prevScore) => ({
         ...prevScore,
-        hightScore: newHighScore,
+        highScore: newHighScore,
       }));
     }
     prevScore.current = score.score;
-  }, [score.score, score.hightScore]);
+  }, [score.score, score.highScore]);
 
   React.useEffect(() => {
     if (hasWin(gridMatrix)) {
@@ -96,9 +96,9 @@ function App() {
           setScore((prevScore) => {
             const updatedScore = {
               score: prevScore.score + newScore.score,
-              hightScore: Math.max(
+              highScore: Math.max(
                 prevScore.score + newScore.score,
-                prevScore.hightScore
+                prevScore.highScore
               ),
             };
             oldScore.current = prevScore;
@@ -116,9 +116,9 @@ function App() {
           setScore((prevScore) => {
             const updatedScore = {
               score: prevScore.score + newScore.score,
-              hightScore: Math.max(
+              highScore: Math.max(
                 prevScore.score + newScore.score,
-                prevScore.hightScore
+                prevScore.highScore
               ),
             };
             oldScore.current = prevScore;
@@ -136,9 +136,9 @@ function App() {
           setScore((prevScore) => {
             const updatedScore = {
               score: prevScore.score + newScore.score,
-              hightScore: Math.max(
+              highScore: Math.max(
                 prevScore.score + newScore.score,
-                prevScore.hightScore
+                prevScore.highScore
               ),
             };
             oldScore.current = prevScore;
@@ -156,9 +156,9 @@ function App() {
           setScore((prevScore) => {
             const updatedScore = {
               score: prevScore.score + newScore.score,
-              hightScore: Math.max(
+              highScore: Math.max(
                 prevScore.score + newScore.score,
-                prevScore.hightScore
+                prevScore.highScore
               ),
             };
             oldScore.current = prevScore;
@@ -309,7 +309,7 @@ function App() {
             setGridMatrix(oldGridMatrix.current);
           }}
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setGridMatrix(newGame());
           }}
         />
@@ -320,7 +320,7 @@ function App() {
         <Modal
           title="You Win!"
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setIsWin(false);
             setGridMatrix(newGame());
           }}
@@ -330,7 +330,7 @@ function App() {
         <Modal
           title="Game Over!"
           onNewGame={() => {
-            setScore({ score: 0, hightScore: score.hightScore });
+            setScore({ score: 0, highScore: score.highScore });
             setIsGameOver(false);
             setGridMatrix(newGame());
           }}
