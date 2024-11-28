@@ -34,9 +34,13 @@ function App() {
   const touchStartRef = React.useRef<Touch | null>(null);
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
   const isFullScreenRef = React.useRef<boolean>(isFullScreen);
+  const [newGameConfirm, setNewGameConfirm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     isFullScreenRef.current = isFullScreen;
+    if (!isFullScreen) {
+      setNewGameConfirm(false);
+    }
   }, [isFullScreen]);
 
   React.useEffect(() => {
@@ -310,8 +314,7 @@ function App() {
             setGridMatrix(oldGridMatrix.current);
           }}
           onNewGame={() => {
-            setScore({ score: 0, highScore: score.highScore });
-            setGridMatrix(newGame());
+            setNewGameConfirm(true);
           }}
         />
         <Grid gridMatrix={gridMatrix} />
@@ -323,7 +326,12 @@ function App() {
           onNewGame={() => {
             setScore({ score: 0, highScore: score.highScore });
             setIsWin(false);
-            setGridMatrix(newGame());
+            setGridMatrix(() => {
+              const newMatrix = newGame();
+              oldGridMatrix.current = newMatrix;
+              return newMatrix;
+            });
+            oldScore.current = { score: 0, highScore: score.highScore };
           }}
         />
       )}
@@ -333,8 +341,30 @@ function App() {
           onNewGame={() => {
             setScore({ score: 0, highScore: score.highScore });
             setIsGameOver(false);
-            setGridMatrix(newGame());
+            setGridMatrix(() => {
+              const newMatrix = newGame();
+              oldGridMatrix.current = newMatrix;
+              return newMatrix;
+            });
+            oldScore.current = { score: 0, highScore: score.highScore };
           }}
+        />
+      )}
+      {newGameConfirm && (
+        <Modal
+          hasCancel={true}
+          title="Start a new game?"
+          onNewGame={() => {
+            setScore({ score: 0, highScore: score.highScore });
+            setGridMatrix(() => {
+              const newMatrix = newGame();
+              oldGridMatrix.current = newMatrix;
+              return newMatrix;
+            });
+            oldScore.current = { score: 0, highScore: score.highScore };
+            setNewGameConfirm(false);
+          }}
+          onCancel={() => setNewGameConfirm(false)}
         />
       )}
     </div>
