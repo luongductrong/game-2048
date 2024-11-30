@@ -95,6 +95,10 @@ const merge = (cells: number[], isRevest: boolean, addScore: AddScoreType) => {
   const result: number[] = [];
   let skip = false;
 
+  if (isRevest) {
+    cells.reverse();
+  }
+
   cells
     .filter((cell) => cell !== 0)
     .forEach((cell, index, array) => {
@@ -111,6 +115,10 @@ const merge = (cells: number[], isRevest: boolean, addScore: AddScoreType) => {
         result.push(cell);
       }
     });
+
+  if (isRevest) {
+    result.reverse();
+  }
 
   let length = result.length;
   while (length < 4) {
