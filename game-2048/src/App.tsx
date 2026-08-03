@@ -1,12 +1,12 @@
-import React from "react";
-import Grid from "./components/Grid";
-import Score from "./components/Score";
-import Buttons from "./components/Buttons";
-import Modal from "./components/Modal";
-import FullScreenButton from "./components/FullScreenButton";
-import ExitButton from "./components/ExitFullScreenButton";
-import { newGame, moveUp, moveDown, moveLeft, moveRight } from "./handlers";
-import { isGameOver as hasGameOver, isWin as hasWin } from "./handlers";
+import * as React from "react";
+import Grid from "@/components/Grid";
+import Score from "@/components/Score";
+import Buttons from "@/components/Buttons";
+import Modal from "@/components/Modal";
+import FullScreenButton from "@/components/FullScreenButton";
+import ExitButton from "@/components/ExitFullScreenButton";
+import { newGame, moveUp, moveDown, moveLeft, moveRight } from "@/handlers";
+import { isGameOver as hasGameOver, isWin as hasWin } from "@/handlers";
 
 // const gridMatrix = [
 //   [2, 4, 8, 16],
