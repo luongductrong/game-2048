@@ -106,12 +106,12 @@ function App() {
             score: prevScore.score + newScore.score,
             highScore: Math.max(
               prevScore.score + newScore.score,
-              prevScore.highScore
+              prevScore.highScore,
             ),
           };
           oldScore.current = prevScore;
           return updatedScore;
-        })
+        }),
       );
       oldGridMatrix.current = prevMatrix;
       return newMatrix;
@@ -126,12 +126,12 @@ function App() {
             score: prevScore.score + newScore.score,
             highScore: Math.max(
               prevScore.score + newScore.score,
-              prevScore.highScore
+              prevScore.highScore,
             ),
           };
           oldScore.current = prevScore;
           return updatedScore;
-        })
+        }),
       );
       oldGridMatrix.current = prevMatrix;
       return newMatrix;
@@ -146,12 +146,12 @@ function App() {
             score: prevScore.score + newScore.score,
             highScore: Math.max(
               prevScore.score + newScore.score,
-              prevScore.highScore
+              prevScore.highScore,
             ),
           };
           oldScore.current = prevScore;
           return updatedScore;
-        })
+        }),
       );
       oldGridMatrix.current = prevMatrix;
       return newMatrix;
@@ -166,12 +166,12 @@ function App() {
             score: prevScore.score + newScore.score,
             highScore: Math.max(
               prevScore.score + newScore.score,
-              prevScore.highScore
+              prevScore.highScore,
             ),
           };
           oldScore.current = prevScore;
           return updatedScore;
-        })
+        }),
       );
       oldGridMatrix.current = prevMatrix;
       return newMatrix;
@@ -296,7 +296,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center h-screen relative">
+    <div className="flex justify-center h-screen relative select-none">
       {isFullScreen ? (
         <ExitButton onFullScreenChange={setIsFullScreen} />
       ) : (
