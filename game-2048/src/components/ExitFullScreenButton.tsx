@@ -1,10 +1,10 @@
 import * as React from "react";
 
-type Props = {
+interface ExitButtonProps {
   onFullScreenChange: (isFullScreen: boolean) => void;
-};
+}
 
-function ExitButton({ onFullScreenChange }: Props) {
+export function ExitButton({ onFullScreenChange }: ExitButtonProps) {
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "F11") {
@@ -35,5 +35,3 @@ function ExitButton({ onFullScreenChange }: Props) {
     </button>
   );
 }
-
-export default ExitButton;

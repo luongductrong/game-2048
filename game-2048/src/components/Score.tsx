@@ -1,15 +1,13 @@
-import * as React from "react";
-
 type ScoreType = {
   score: number;
   highScore: number;
 };
 
-type ScoreProps = {
+interface ScoreProps {
   score: ScoreType;
-};
+}
 
-function Score({ score }: ScoreProps) {
+export function ScoreGroup({ score }: ScoreProps) {
   const formatScore = (score: number): string => {
     if (score < 1000) return score.toString();
     if (score < 1000000) return `${(score / 1000).toFixed(1)}K`;
@@ -45,5 +43,3 @@ function Score({ score }: ScoreProps) {
     </div>
   );
 }
-
-export default React.memo(Score);

@@ -1,10 +1,12 @@
 import * as React from "react";
 
-type Props = {
+interface FullScreenButtonProps {
   onFullScreenChange: (isFullScreen: boolean) => void;
-};
+}
 
-function FullScreenButton({ onFullScreenChange }: Props) {
+export function FullScreenButton({
+  onFullScreenChange,
+}: FullScreenButtonProps) {
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "F11") {
@@ -31,5 +33,3 @@ function FullScreenButton({ onFullScreenChange }: Props) {
     </div>
   );
 }
-
-export default FullScreenButton;

@@ -1,11 +1,9 @@
-import * as React from "react";
-
-type ButtonProps = {
+interface ButtonGroupProps {
   onUndo: () => void;
   onNewGame: () => void;
-};
+}
 
-function Buttons({ onUndo, onNewGame }: ButtonProps) {
+export function ButtonGroup({ onUndo, onNewGame }: ButtonGroupProps) {
   return (
     <div className="flex justify-end my-3">
       <button
@@ -35,5 +33,3 @@ function Buttons({ onUndo, onNewGame }: ButtonProps) {
     </div>
   );
 }
-
-export default React.memo(Buttons);

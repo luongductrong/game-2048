@@ -1,10 +1,10 @@
 import * as React from "react";
-import Grid from "@/components/Grid";
-import Score from "@/components/Score";
-import Buttons from "@/components/Buttons";
-import Modal from "@/components/Modal";
-import FullScreenButton from "@/components/FullScreenButton";
-import ExitButton from "@/components/ExitFullScreenButton";
+import { GameGrid } from "@/components/Grid";
+import { ScoreGroup } from "@/components/Score";
+import { ButtonGroup } from "@/components/Buttons";
+import { Modal } from "@/components/Modal";
+import { FullScreenButton } from "@/components/FullScreenButton";
+import { ExitButton } from "@/components/ExitFullScreenButton";
 import { newGame, moveUp, moveDown, moveLeft, moveRight } from "@/handlers";
 import { isGameOver as hasGameOver, isWin as hasWin } from "@/handlers";
 
@@ -307,8 +307,8 @@ function App() {
           !isLandscape ? "w-screen h-full" : "w-[70vh] h-full"
         } bg-rose-100`}
       >
-        <Score score={score} />
-        <Buttons
+        <ScoreGroup score={score} />
+        <ButtonGroup
           onUndo={() => {
             setScore(oldScore.current);
             setGridMatrix(oldGridMatrix.current);
@@ -317,7 +317,7 @@ function App() {
             setNewGameConfirm(true);
           }}
         />
-        <Grid gridMatrix={gridMatrix} />
+        <GameGrid gridMatrix={gridMatrix} />
         {!isLandscape && <div className="py-4"></div>}
       </div>
       {isWin && (

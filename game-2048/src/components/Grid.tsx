@@ -1,8 +1,8 @@
-type GridProps = {
+interface GameGridProps {
   gridMatrix: number[][];
-};
+}
 
-function Grid({ gridMatrix }: GridProps) {
+export function GameGrid({ gridMatrix }: GameGridProps) {
   const getCellColor = (cell: number) => {
     switch (cell) {
       case 2:
@@ -38,15 +38,13 @@ function Grid({ gridMatrix }: GridProps) {
           <div
             key={`${rowIndex}-${cellIndex}`}
             className={`${getCellColor(
-              cell
+              cell,
             )} w-full aspect-square rounded-md flex items-center justify-center text-2xl font-bold`}
           >
             {cell > 0 ? cell : null}
           </div>
-        ))
+        )),
       )}
     </div>
   );
 }
-
-export default Grid;
