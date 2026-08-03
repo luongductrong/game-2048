@@ -1,12 +1,12 @@
 import * as React from "react";
-import { GameGrid } from "@/components/Grid";
-import { ScoreGroup } from "@/components/Score";
-import { ButtonGroup } from "@/components/Buttons";
-import { Modal } from "@/components/Modal";
-import { FullScreenButton } from "@/components/FullScreenButton";
-import { ExitButton } from "@/components/ExitFullScreenButton";
-import { newGame, moveUp, moveDown, moveLeft, moveRight } from "@/handlers";
+import { Modal } from "@/components/app-modal";
+import { GameGrid } from "@/components/game-grid";
+import { ScoreGroup } from "@/components/score-group";
+import { ButtonGroup } from "@/components/button-group";
+import { ExitButton } from "@/components/exit-fullscreen-button";
+import { FullScreenButton } from "@/components/fullscreen-button";
 import { isGameOver as hasGameOver, isWin as hasWin } from "@/handlers";
+import { newGame, moveUp, moveDown, moveLeft, moveRight } from "@/handlers";
 
 // const gridMatrix = [
 //   [2, 4, 8, 16],

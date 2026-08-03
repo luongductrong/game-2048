@@ -5,12 +5,9 @@ interface ModalProps {
   onCancel?: () => void | undefined;
 }
 
-export function Modal({
-  hasCancel = false,
-  title,
-  onNewGame,
-  onCancel,
-}: ModalProps) {
+export function Modal(props: ModalProps) {
+  const { hasCancel = false, title, onNewGame, onCancel } = props;
+
   return (
     <div className="fixed inset-0 bg-gray-700/60 flex justify-center items-center z-50">
       <div className="bg-slate-200 py-6 px-12 rounded-md text-center">

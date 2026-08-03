@@ -15,7 +15,7 @@ export function ExitButton({ onFullScreenChange }: ExitButtonProps) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [onFullScreenChange]);
 
   return (
     <button

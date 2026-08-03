@@ -4,9 +4,9 @@ interface FullScreenButtonProps {
   onFullScreenChange: (isFullScreen: boolean) => void;
 }
 
-export function FullScreenButton({
-  onFullScreenChange,
-}: FullScreenButtonProps) {
+export function FullScreenButton(props: FullScreenButtonProps) {
+  const { onFullScreenChange } = props;
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "F11") {
@@ -17,7 +17,7 @@ export function FullScreenButton({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [onFullScreenChange]);
 
   return (
     <div className="fixed inset-0 bg-gray-700/60 flex justify-center items-center z-50">
