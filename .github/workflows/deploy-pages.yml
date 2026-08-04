@@ -43,6 +43,9 @@ jobs:
         env:
           VITE_BASE_URL: ${{ steps.pages.outputs.base_path }}
 
+      - name: Create 404.html
+        run: cp game-2048/dist/index.html game-2048/dist/404.html
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
