@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { TileSnapshot } from "@/engine/tile";
 import { Board, type MoveDirection } from "@/engine/board";
+import { readHighScore, writeHighScore } from "@/lib/helpers/high-score";
 
 // @export
 export type GameSnapshot = {
@@ -20,10 +21,10 @@ type GameHistoryEntry = {
 class GameStore {
   private board = new Board();
   private score = 0;
-  private highScore = 0;
+  private highScore = readHighScore();
   private previousState: GameHistoryEntry | null = null;
   private listeners = new Set<GameListener>();
-  private snapshot = this.createSnapshot();
+  private snapshot = this.createSnapshot(); // must be initialized after board, score, and highScore
 
   public subscribe = (listener: GameListener) => {
     this.listeners.add(listener);
@@ -54,7 +55,10 @@ class GameStore {
 
     this.previousState = previousState;
     this.score += result.scoreGained;
-    this.highScore = Math.max(this.highScore, this.score);
+    if (this.score > this.highScore) {
+      this.highScore = this.score;
+      writeHighScore(this.highScore);
+    }
     this.commit();
   };
 
