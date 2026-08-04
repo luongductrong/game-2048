@@ -1,22 +1,11 @@
-type ScoreType = {
+import { formatScore } from "@/lib/utils";
+
+interface ScoreGroupProps {
   score: number;
   highScore: number;
-};
-
-interface ScoreProps {
-  score: ScoreType;
 }
 
-export function ScoreGroup({ score }: ScoreProps) {
-  const formatScore = (score: number): string => {
-    if (score < 1000) return score.toString();
-    if (score < 1000000) return `${(score / 1000).toFixed(1)}K`;
-    return `${(score / 1000000).toFixed(1)}M`;
-  };
-
-  const scoreX = formatScore(score.score);
-  const highScoreX = formatScore(score.highScore);
-
+export function ScoreGroup({ score, highScore }: ScoreGroupProps) {
   return (
     <div className="flex flex-row font-noto w-full">
       <div className="text-7xl font-bold text-rose-400 w-1/2 flex items-center justify-start">
@@ -28,7 +17,7 @@ export function ScoreGroup({ score }: ScoreProps) {
             Score
           </div>
           <div className="text-xl font-bold text-rose-50 inline-block">
-            {scoreX}
+            {formatScore(score)}
           </div>
         </div>
         <div className="flex flex-col justify-center items-center bg-rose-300 rounded-md ml-2 p-2">
@@ -36,7 +25,7 @@ export function ScoreGroup({ score }: ScoreProps) {
             High Score
           </div>
           <div className="text-xl font-bold text-rose-50 inline-block">
-            {highScoreX}
+            {formatScore(highScore)}
           </div>
         </div>
       </div>
