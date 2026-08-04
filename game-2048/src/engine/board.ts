@@ -1,6 +1,5 @@
-import { Tile } from "./tile";
-import { Line } from "./line";
-import type { MergeDirection, TileSlot } from "./line";
+import { Line, type MergeDirection } from "./line";
+import { Tile, type TileSlot, type TileSnapshot } from "./tile";
 
 // @export
 export type MoveDirection = "left" | "right" | "up" | "down";
@@ -19,7 +18,7 @@ export class Board {
   private nextTileId = 0;
   private _tiles: TileSlot[][];
 
-  public get tiles(): ReadonlyArray<ReadonlyArray<Tile | null>> {
+  public get tiles(): ReadonlyArray<ReadonlyArray<TileSlot>> {
     return this._tiles;
   }
 
@@ -100,6 +99,23 @@ export class Board {
     this.nextTileId = 0;
     this.spawnTile();
     this.spawnTile();
+  }
+
+  // prettier-ignore
+  public restoreTiles(tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>) {
+    if (tiles.length !== Board.SIZE) {
+      throw new Error("Board tiles row count must match board size.");
+    }
+
+    this._tiles = tiles.map((row) => {
+      if (row.length !== Board.SIZE) {
+        throw new Error("Board tiles column count must match board size.");
+      }
+
+      return row.map((tile) =>
+        tile === null ? null : new Tile(tile.id, tile.value),
+      );
+    });
   }
 
   private getLine(index: number, direction: MoveDirection): Line {

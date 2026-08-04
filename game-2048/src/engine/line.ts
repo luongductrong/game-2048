@@ -1,7 +1,5 @@
-import { Tile } from "./tile";
+import { Tile, type TileSlot } from "./tile";
 
-// @export
-export type TileSlot = Tile | null;
 // @export
 export type MergeDirection = "left" | "right";
 

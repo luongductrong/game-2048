@@ -1,15 +1,10 @@
 import * as React from "react";
+import type { TileSnapshot } from "@/engine/tile";
 import { Board, type MoveDirection } from "@/engine/board";
 
 // @export
-export type TileSnapshot = {
-  readonly id: number;
-  readonly value: number;
-};
-
-// @export
 export type GameSnapshot = {
-  readonly tiles: ReadonlyArray<ReadonlyArray<TileSnapshot | null>>;
+  readonly tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>;
   readonly score: number;
   readonly highScore: number;
   readonly hasWon: boolean;
@@ -17,11 +12,16 @@ export type GameSnapshot = {
 };
 
 type GameListener = () => void;
+type GameHistoryEntry = {
+  readonly tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>;
+  readonly score: number;
+};
 
 class GameStore {
   private board = new Board();
   private score = 0;
   private highScore = 0;
+  private previousState: GameHistoryEntry | null = null;
   private listeners = new Set<GameListener>();
   private snapshot = this.createSnapshot();
 
@@ -42,20 +42,37 @@ class GameStore {
       return;
     }
 
+    const previousState: GameHistoryEntry = {
+      tiles: this.snapshot.tiles,
+      score: this.score,
+    };
     const result = this.board.move(direction);
 
     if (!result.moved) {
       return;
     }
 
+    this.previousState = previousState;
     this.score += result.scoreGained;
     this.highScore = Math.max(this.highScore, this.score);
+    this.commit();
+  };
+
+  public undo = () => {
+    if (!this.previousState) {
+      return;
+    }
+
+    this.board.restoreTiles(this.previousState.tiles);
+    this.score = this.previousState.score;
+    this.previousState = null;
     this.commit();
   };
 
   public reset = () => {
     this.board.reset();
     this.score = 0;
+    this.previousState = null;
     this.commit();
   };
 
@@ -103,6 +120,7 @@ export function useGame() {
   return {
     ...snapshot,
     move: gameStore.move,
+    undo: gameStore.undo,
     reset: gameStore.reset,
   };
 }
