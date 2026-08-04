@@ -25,4 +25,7 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
+
+// allowedHosts: [
+//         "memorabilia-steven-reproductive-inclusion.trycloudflare.com",
 //       ],
