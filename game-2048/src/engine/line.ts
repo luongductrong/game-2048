@@ -23,12 +23,13 @@ export class Line {
     return this._tiles;
   }
 
-  public merge(direction: MergeDirection): void {
+  public merge(direction: MergeDirection): number {
     const workingTiles =
       direction === "left" ? [...this._tiles] : [...this._tiles].reverse();
     const lineTiles = workingTiles.filter(
       (tile): tile is Tile => tile !== null,
     );
+    let scoreGained = 0;
     const mergedTiles: TileSlot[] = [];
 
     for (let i = 0; i < lineTiles.length; i++) {
@@ -37,6 +38,7 @@ export class Line {
 
       if (nextTile && currentTile.value === nextTile.value) {
         nextTile.merge();
+        scoreGained += nextTile.value;
         mergedTiles.push(nextTile);
         i++;
       } else {
@@ -52,6 +54,7 @@ export class Line {
       direction === "left" ? mergedTiles : mergedTiles.reverse();
 
     this._tiles.splice(0, this.size, ...resultTiles);
+    return scoreGained;
   }
 
   public toArray(): TileSlot[] {

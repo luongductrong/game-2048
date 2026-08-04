@@ -2,9 +2,17 @@ import { Tile } from "./tile";
 import { Line } from "./line";
 import type { MergeDirection, TileSlot } from "./line";
 
-type MoveDirection = "left" | "right" | "up" | "down";
+// @export
+export type MoveDirection = "left" | "right" | "up" | "down";
 type CellPosition = [row: number, col: number];
 
+// @export
+export type MoveResult = {
+  moved: boolean;
+  scoreGained: number;
+};
+
+// @export
 export class Board {
   private static SIZE = 4;
   private nextTileId = 0;
@@ -91,17 +99,18 @@ export class Board {
   }
 
   private serializeTiles() {
-    return this._tiles.map((row) => row.map((tile) => tile?.value ?? null));
+    return this._tiles.map((row) => row.map((tile) => tile?.value ?? null)); // get the value of the tile or null if it's empty
   }
 
-  public move(direction: MoveDirection): boolean {
+  public move(direction: MoveDirection): MoveResult {
     const before = this.serializeTiles();
     const mergeDirection = this.getMergeDirection(direction);
+    let scoreGained = 0;
 
     for (let index = 0; index < Board.SIZE; index++) {
       const line = this.getLine(index, direction);
 
-      line.merge(mergeDirection);
+      scoreGained += line.merge(mergeDirection);
       this.setLine(index, direction, line);
     }
 
@@ -112,6 +121,9 @@ export class Board {
       this.spawnTile();
     }
 
-    return hasChanged;
+    return {
+      moved: hasChanged,
+      scoreGained: hasChanged ? scoreGained : 0,
+    };
   }
 }
