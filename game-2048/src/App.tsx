@@ -1,22 +1,18 @@
 import * as React from "react";
 import { useGame } from "@/hooks/use-game";
 import { Modal } from "@/components/app-modal";
-import { GameGrid } from "@/components/game-grid";
+import { TilesView } from "@/components/tiles-view";
 import type { MoveDirection } from "@/engine/board";
 import { ScoreGroup } from "@/components/score-group";
 import { ButtonGroup } from "@/components/button-group";
+import { useOrientation } from "@/hooks/use-orientation";
 
 export function App() {
   // prettier-ignore
   const { tiles, score, highScore, hasWon, isGameOver, move, undo, reset } = useGame();
-  const [isLandscape, setIsLandscape] = React.useState<boolean>(false);
+  const orientation = useOrientation();
   const touchStartRef = React.useRef<Touch | null>(null);
   const [newGameConfirm, setNewGameConfirm] = React.useState<boolean>(false);
-
-  const gridMatrix = React.useMemo(
-    () => tiles.map((row) => row.map((tile) => tile?.value ?? 0)),
-    [tiles],
-  );
 
   const hasOpenModal = hasWon || isGameOver || newGameConfirm;
 
@@ -35,17 +31,6 @@ export function App() {
     reset();
     setNewGameConfirm(false);
   }, [reset]);
-
-  React.useEffect(() => {
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault();
-    };
-
-    document.addEventListener("selectstart", handleSelectStart);
-    return () => {
-      document.removeEventListener("selectstart", handleSelectStart);
-    };
-  }, []);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -134,22 +119,11 @@ export function App() {
     };
   }, [handleMove]);
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
     <div className="flex justify-center h-screen relative select-none">
       <div
         className={`container flex flex-col justify-center px-4 ${
-          !isLandscape ? "w-screen h-full" : "w-[70vh] h-full"
+          orientation === "portrait" ? "w-screen h-full" : "w-[70vh] h-full"
         } bg-rose-100`}
       >
         <ScoreGroup score={score} highScore={highScore} />
@@ -161,8 +135,8 @@ export function App() {
             setNewGameConfirm(true);
           }}
         />
-        <GameGrid gridMatrix={gridMatrix} />
-        {!isLandscape && <div className="py-4"></div>}
+        <TilesView tiles={tiles} />
+        {orientation === "portrait" && <div className="py-4"></div>}
       </div>
       {hasWon && <Modal title="You Win!" onNewGame={handleReset} />}
       {isGameOver && <Modal title="Game Over!" onNewGame={handleReset} />}
