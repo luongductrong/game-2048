@@ -1,5 +1,7 @@
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { TileSnapshot } from "@/engine/tile";
+import { AnimatePresence, motion } from "motion/react";
 
 function getTileColor(value: number) {
   switch (value) {
@@ -32,27 +34,104 @@ function getTileColor(value: number) {
   }
 }
 
+type AnimatedTile = {
+  readonly id: number;
+  readonly value: number;
+  readonly row: number;
+  readonly col: number;
+};
+
+function flattenTiles(
+  tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>,
+): AnimatedTile[] {
+  return tiles.flatMap((line, row) =>
+    line.flatMap((tile, col) =>
+      tile === null
+        ? []
+        : [
+            {
+              id: tile.id,
+              value: tile.value,
+              row,
+              col,
+            },
+          ],
+    ),
+  );
+}
+
 interface TilesViewProps {
   tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>;
 }
 
 // @export
 export function TilesView({ tiles }: TilesViewProps) {
+  const animatedTiles = React.useMemo(() => flattenTiles(tiles), [tiles]);
+
   return (
-    <div className="grid grid-cols-4 gap-3 bg-rose-300 p-3 rounded-md">
-      {tiles.map((line, lineIdx) =>
-        line.map((tile, tileIdx) => (
+    <div className="relative rounded-md bg-rose-300 p-3">
+      <div className="grid grid-cols-4 gap-3">
+        {Array.from({ length: 16 }, (_, index) => (
           <div
-            key={tile ? tile.id : `empty-${lineIdx}-${tileIdx}`}
-            className={cn(
-              "w-full aspect-square rounded-md flex items-center justify-center text-2xl font-bold",
-              getTileColor(tile?.value ?? 0),
-            )}
-          >
-            {tile?.value}
-          </div>
-        )),
-      )}
+            key={index}
+            className="aspect-square rounded-md bg-rose-100/70 shadow-inner"
+          />
+        ))}
+      </div>
+      <div className="absolute inset-3 grid grid-cols-4 grid-rows-4 gap-3">
+        <AnimatePresence initial={false}>
+          {animatedTiles.map((tile) => (
+            <motion.div
+              key={tile.id}
+              layout
+              initial={{ opacity: 0, scale: 0.35 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{
+                opacity: 0,
+                scale: 0.45,
+                filter: "blur(2px)",
+              }}
+              transition={{
+                layout: {
+                  type: "spring",
+                  stiffness: 520,
+                  damping: 42,
+                  mass: 0.75,
+                },
+                scale: {
+                  duration: 0.18,
+                  ease: "easeOut",
+                },
+                opacity: {
+                  duration: 0.12,
+                },
+              }}
+              style={{
+                gridColumnStart: tile.col + 1,
+                gridRowStart: tile.row + 1,
+                zIndex: 1,
+              }}
+              className={cn(
+                "flex aspect-square items-center justify-center rounded-md text-2xl font-bold shadow-lg will-change-transform",
+                getTileColor(tile.value),
+              )}
+            >
+              <motion.span
+                key={`${tile.id}-${tile.value}`}
+                initial={{ scale: 0.65, opacity: 0.75 }}
+                animate={{ scale: [0.85, 1.22, 1], opacity: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 650,
+                  damping: 24,
+                }}
+              >
+                {tile.value}
+              </motion.span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
