@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useGame } from "@/hooks/use-game";
+import { AnimatePresence } from "motion/react";
 import { Modal } from "@/components/app-modal";
 import { useKeyMove } from "@/hooks/use-key-move";
 import { TilesView } from "@/components/tiles-view";
@@ -26,13 +27,13 @@ export function App() {
     [hasOpenModal, move],
   );
 
-  // Hook to listen for key presses and trigger moves
-  useKeyMove(handleMove);
-
   const handleReset = React.useCallback(() => {
     reset();
     setNewGameConfirm(false);
   }, [reset]);
+
+  // Hook to listen for key presses and trigger moves
+  useKeyMove(handleMove);
 
   return (
     <div className="flex justify-center h-screen relative select-none">
@@ -53,16 +54,21 @@ export function App() {
         <TilesView tiles={tiles} onMove={handleMove} />
         {orientation === "portrait" && <div className="py-4"></div>}
       </div>
-      {hasWon && <Modal title="You Win!" onNewGame={handleReset} />}
-      {isGameOver && <Modal title="Game Over!" onNewGame={handleReset} />}
-      {newGameConfirm && (
-        <Modal
-          hasCancel={true}
-          title="Start a new game?"
-          onNewGame={handleReset}
-          onCancel={() => setNewGameConfirm(false)}
-        />
-      )}
+      <AnimatePresence>
+        {hasWon && <Modal key="win" title="You Win!" onNewGame={handleReset} />}
+        {isGameOver && (
+          <Modal key="over" title="Game Over!" onNewGame={handleReset} />
+        )}
+        {newGameConfirm && (
+          <Modal
+            key="confirm"
+            hasCancel={true}
+            title="Start a new game?"
+            onNewGame={handleReset}
+            onCancel={() => setNewGameConfirm(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
