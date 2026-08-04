@@ -40,7 +40,7 @@ export function App() {
       <div
         className={`container flex flex-col justify-center px-4 ${
           orientation === "portrait" ? "w-screen h-full" : "w-[70vh] h-full"
-        } bg-rose-100`}
+        } bg-background`}
       >
         <ScoreGroup score={score} highScore={highScore} />
         <ButtonGroup

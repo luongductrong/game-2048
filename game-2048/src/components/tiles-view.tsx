@@ -7,31 +7,31 @@ import { AnimatePresence, motion } from "motion/react";
 function getTileColor(value: number) {
   switch (value) {
     case 2:
-      return "bg-red-500";
+      return "bg-rose-200 text-rose-900 shadow-rose-500/20";
     case 4:
-      return "bg-blue-500";
+      return "bg-pink-200 text-pink-950 shadow-pink-500/20";
     case 8:
-      return "bg-green-500";
+      return "bg-orange-200 text-orange-950 shadow-orange-500/25";
     case 16:
-      return "bg-yellow-500";
+      return "bg-amber-300 text-amber-950 shadow-amber-500/30";
     case 32:
-      return "bg-pink-500";
+      return "bg-rose-400 text-white shadow-rose-600/30";
     case 64:
-      return "bg-purple-500";
+      return "bg-red-500 text-white shadow-red-600/35";
     case 128:
-      return "bg-indigo-500";
+      return "bg-fuchsia-500 text-white shadow-fuchsia-700/30";
     case 256:
-      return "bg-red-600";
+      return "bg-purple-500 text-white shadow-purple-700/30";
     case 512:
-      return "bg-blue-300";
+      return "bg-violet-600 text-white shadow-violet-900/35";
     case 1024:
-      return "bg-green-300";
+      return "bg-orange-500 text-white shadow-orange-800/35";
     case 2048:
-      return "bg-yellow-300";
+      return "bg-rose-600 text-white shadow-rose-900/40 ring-rose-200/90";
     case 4096:
-      return "bg-pink-300";
+      return "bg-pink-600 text-white shadow-pink-800/35 ring-pink-200/70";
     default:
-      return "bg-rose-100";
+      return "bg-rose-950 text-rose-50 shadow-rose-950/40 ring-rose-300/70";
   }
 }
 
@@ -66,13 +66,13 @@ export function TilesView({ tiles, onMove }: TilesViewProps) {
           onMove(direction);
         }
       }}
-      className="relative touch-none rounded-md bg-rose-300 p-3"
+      className="relative touch-none rounded-md bg-primary p-3"
     >
       <div className="grid grid-cols-4 gap-3">
         {Array.from({ length: 16 }, (_, index) => (
           <div
             key={index}
-            className="aspect-square rounded-md bg-rose-100/70 shadow-inner"
+            className="aspect-square rounded-md bg-muted-foreground shadow-inner"
           />
         ))}
       </div>
@@ -110,7 +110,7 @@ export function TilesView({ tiles, onMove }: TilesViewProps) {
                 zIndex: 1,
               }}
               className={cn(
-                "flex aspect-square items-center justify-center rounded-md text-2xl font-bold shadow-lg will-change-transform",
+                "flex aspect-square items-center justify-center rounded-md text-2xl font-bold shadow-lg will-change-transform ring-2 ring-primary",
                 getTileColor(tile.value),
               )}
             >
