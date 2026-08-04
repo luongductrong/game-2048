@@ -5,10 +5,12 @@ interface ButtonGroupProps {
 
 export function ButtonGroup({ onUndo, onNewGame }: ButtonGroupProps) {
   return (
-    <div className="flex justify-end my-3 text-muted-foreground">
+    <div className="flex justify-end items-center my-3 gap-2 text-muted-foreground">
       <button
-        className="bg-primary p-2 px-2 rounded-md hover:bg-primary-active transition-colors duration-300 cursor-pointer"
+        className="bg-primary p-2 rounded-md hover:bg-primary-active transition-colors duration-300 cursor-pointer"
         onClick={onUndo}
+        aria-label="Undo last move"
+        title="Undo last move"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,8 +21,10 @@ export function ButtonGroup({ onUndo, onNewGame }: ButtonGroupProps) {
         </svg>
       </button>
       <button
-        className="bg-primary p-2 px-2 ml-2 rounded-md hover:bg-primary-active transition-colors duration-300 cursor-pointer"
+        className="bg-primary p-2 rounded-md hover:bg-primary-active transition-colors duration-300 cursor-pointer"
         onClick={onNewGame}
+        aria-label="New Game"
+        title="New Game"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

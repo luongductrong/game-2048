@@ -1,4 +1,5 @@
 import * as React from "react";
+import { cn } from "@/lib/utils";
 import { useGame } from "@/hooks/use-game";
 import { AnimatePresence } from "motion/react";
 import { Modal } from "@/components/app-modal";
@@ -7,10 +8,10 @@ import { TilesView } from "@/components/tiles-view";
 import type { MoveDirection } from "@/engine/board";
 import { ScoreGroup } from "@/components/score-group";
 import { ButtonGroup } from "@/components/button-group";
-import { useOrientation } from "@/hooks/use-orientation";
 
 export function App() {
-  const orientation = useOrientation();
+  const [headerHeight, setHeaderHeight] = React.useState(0);
+  const headerRef = React.useRef<HTMLDivElement>(null);
   const [newGameConfirm, setNewGameConfirm] = React.useState<boolean>(false);
   // prettier-ignore
   const { tiles, score, highScore, hasWon, isGameOver, move, undo, reset } = useGame();
@@ -35,24 +36,37 @@ export function App() {
   // Hook to listen for key presses and trigger moves
   useKeyMove(handleMove);
 
+  React.useLayoutEffect(() => {
+    if (headerRef.current) {
+      setHeaderHeight(headerRef.current.clientHeight);
+    }
+  }, []);
+
   return (
-    <div className="flex justify-center h-screen relative select-none">
+    <div
+      className={cn(
+        "relative flex justify-center items-center h-dvh w-dvw select-none font-mono bg-background",
+        "p-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]",
+      )}
+    >
       <div
-        className={`container flex flex-col justify-center px-4 ${
-          orientation === "portrait" ? "w-screen h-full" : "w-[70vh] h-full"
-        } bg-background`}
+        className="w-[min(100%,calc(100dvh-var(--game-header-height)-env(safe-area-inset-bottom)-2.5rem))]"
+        style={
+          { "--game-header-height": `${headerHeight}px` } as React.CSSProperties
+        }
       >
-        <ScoreGroup score={score} highScore={highScore} />
-        <ButtonGroup
-          onUndo={() => {
-            undo();
-          }}
-          onNewGame={() => {
-            setNewGameConfirm(true);
-          }}
-        />
+        <div ref={headerRef}>
+          <ScoreGroup score={score} highScore={highScore} />
+          <ButtonGroup
+            onUndo={() => {
+              undo();
+            }}
+            onNewGame={() => {
+              setNewGameConfirm(true);
+            }}
+          />
+        </div>
         <TilesView tiles={tiles} onMove={handleMove} />
-        {orientation === "portrait" && <div className="py-4"></div>}
       </div>
       <AnimatePresence>
         {hasWon && <Modal key="win" title="You Win!" onNewGame={handleReset} />}
