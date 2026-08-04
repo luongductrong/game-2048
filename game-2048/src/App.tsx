@@ -46,7 +46,7 @@ export function App() {
     <div
       className={cn(
         "relative flex justify-center items-center h-dvh w-dvw select-none font-mono bg-background",
-        "p-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]",
+        "px-2 sm:px-5 pt-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]",
       )}
     >
       <div
