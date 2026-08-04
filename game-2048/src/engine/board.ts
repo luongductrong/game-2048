@@ -15,11 +15,46 @@ export type MoveResult = {
 // @export
 export class Board {
   private static SIZE = 4;
+  private static WINNING_VALUE = 2048;
   private nextTileId = 0;
   private _tiles: TileSlot[][];
 
   public get tiles(): ReadonlyArray<ReadonlyArray<Tile | null>> {
     return this._tiles;
+  }
+
+  public get hasWon(): boolean {
+    return this._tiles.some((row) =>
+      row.some((tile) => tile !== null && tile.value >= Board.WINNING_VALUE),
+    );
+  }
+
+  public get isGameOver(): boolean {
+    if (this.getEmptyCells().length > 0) {
+      return false;
+    }
+
+    for (let row = 0; row < Board.SIZE; row++) {
+      for (let col = 0; col < Board.SIZE; col++) {
+        const currentTile = this._tiles[row][col];
+
+        if (
+          col < Board.SIZE - 1 &&
+          currentTile?.value === this._tiles[row][col + 1]?.value
+        ) {
+          return false;
+        }
+
+        if (
+          row < Board.SIZE - 1 &&
+          currentTile?.value === this._tiles[row + 1][col]?.value
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   private getEmptyCells(): CellPosition[] {

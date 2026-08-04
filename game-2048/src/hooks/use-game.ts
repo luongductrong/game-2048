@@ -12,6 +12,8 @@ export type GameSnapshot = {
   readonly tiles: ReadonlyArray<ReadonlyArray<TileSnapshot | null>>;
   readonly score: number;
   readonly highScore: number;
+  readonly hasWon: boolean;
+  readonly isGameOver: boolean;
 };
 
 type GameListener = () => void;
@@ -36,6 +38,10 @@ class GameStore {
   };
 
   public move = (direction: MoveDirection) => {
+    if (this.board.isGameOver) {
+      return;
+    }
+
     const result = this.board.move(direction);
 
     if (!result.moved) {
@@ -78,6 +84,8 @@ class GameStore {
       ),
       score: this.score,
       highScore: this.highScore,
+      hasWon: this.board.hasWon,
+      isGameOver: this.board.isGameOver,
     };
   }
 }
