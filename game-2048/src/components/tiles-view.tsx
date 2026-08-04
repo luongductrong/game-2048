@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { TileSnapshot } from "@/engine/tile";
+import type { MoveDirection } from "@/engine/board";
 import { AnimatePresence, motion } from "motion/react";
 
 function getTileColor(value: number) {
@@ -41,35 +42,32 @@ type AnimatedTile = {
   readonly col: number;
 };
 
-function flattenTiles(
-  tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>,
-): AnimatedTile[] {
-  return tiles.flatMap((line, row) =>
-    line.flatMap((tile, col) =>
-      tile === null
-        ? []
-        : [
-            {
-              id: tile.id,
-              value: tile.value,
-              row,
-              col,
-            },
-          ],
-    ),
-  );
-}
+type PanInfoLike = {
+  offset: {
+    x: number;
+    y: number;
+  };
+};
 
 interface TilesViewProps {
   tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>;
+  onMove: (direction: MoveDirection) => void;
 }
 
 // @export
-export function TilesView({ tiles }: TilesViewProps) {
+export function TilesView({ tiles, onMove }: TilesViewProps) {
   const animatedTiles = React.useMemo(() => flattenTiles(tiles), [tiles]);
 
   return (
-    <div className="relative rounded-md bg-rose-300 p-3">
+    <motion.div
+      onPanEnd={(_, info) => {
+        const direction = getSwipeDirection(info);
+        if (direction) {
+          onMove(direction);
+        }
+      }}
+      className="relative touch-none rounded-md bg-rose-300 p-3"
+    >
       <div className="grid grid-cols-4 gap-3">
         {Array.from({ length: 16 }, (_, index) => (
           <div
@@ -132,6 +130,40 @@ export function TilesView({ tiles }: TilesViewProps) {
           ))}
         </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
+}
+
+function flattenTiles(
+  tiles: ReadonlyArray<ReadonlyArray<TileSnapshot>>,
+): AnimatedTile[] {
+  return tiles.flatMap((line, row) =>
+    line.flatMap((tile, col) =>
+      tile === null
+        ? []
+        : [
+            {
+              id: tile.id,
+              value: tile.value,
+              row,
+              col,
+            },
+          ],
+    ),
+  );
+}
+
+function getSwipeDirection(info: PanInfoLike): MoveDirection | undefined {
+  const minDistance = 48;
+  const { x, y } = info.offset;
+
+  if (Math.abs(x) < minDistance && Math.abs(y) < minDistance) {
+    return;
+  }
+
+  if (Math.abs(x) > Math.abs(y)) {
+    return x > 0 ? "right" : "left";
+  }
+
+  return y > 0 ? "down" : "up";
 }
