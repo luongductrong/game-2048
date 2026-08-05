@@ -114,18 +114,7 @@ export function TilesView({ tiles, onMove }: TilesViewProps) {
                 getTileColor(tile.value),
               )}
             >
-              <motion.span
-                key={`${tile.id}-${tile.value}`}
-                initial={{ scale: 0.65, opacity: 0.75 }}
-                animate={{ scale: [0.85, 1.22, 1], opacity: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 650,
-                  damping: 24,
-                }}
-              >
-                {tile.value}
-              </motion.span>
+              <span>{tile.value}</span>
             </motion.div>
           ))}
         </AnimatePresence>

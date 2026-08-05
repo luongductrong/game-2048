@@ -8,6 +8,7 @@ import { TilesView } from "@/components/tiles-view";
 import type { MoveDirection } from "@/engine/board";
 import { ScoreGroup } from "@/components/score-group";
 import { ButtonGroup } from "@/components/button-group";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export function App() {
   const [headerHeight, setHeaderHeight] = React.useState(0);
@@ -55,7 +56,13 @@ export function App() {
           { "--game-header-height": `${headerHeight}px` } as React.CSSProperties
         }
       >
-        <div ref={headerRef}>
+        <div ref={headerRef} className="relative">
+          <DotLottieReact
+            className="absolute -bottom-11 -left-15 w-auto h-30 z-10"
+            src="./cat-feeling-love-emotionsexpression.lottie"
+            loop
+            autoplay
+          />
           <ScoreGroup score={score} highScore={highScore} />
           <ButtonGroup
             onUndo={() => {
