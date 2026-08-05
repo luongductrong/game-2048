@@ -58,8 +58,9 @@ export function App() {
       >
         <div ref={headerRef} className="relative">
           <DotLottieReact
-            className="absolute -bottom-11 -left-15 w-auto h-30 z-10"
+            className="absolute -bottom-12.5 -left-15 w-71.25 h-35.5 z-10 pointer-events-none overflow-clip"
             src="./cat-feeling-love-emotionsexpression.lottie"
+            renderConfig={{ autoResize: true }}
             loop
             autoplay
           />
